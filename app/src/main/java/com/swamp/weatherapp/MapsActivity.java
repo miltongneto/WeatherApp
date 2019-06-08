@@ -2,7 +2,6 @@ package com.swamp.weatherapp;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,8 +10,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.swamp.weather.helpers.WeatherHelper;
-import com.swamp.weather.model.WeatherInfo;
+import com.swamp.adapters.InfoWindowCustomAdapter;
+import com.swamp.weatherapp.helpers.WeatherHelper;
+import com.swamp.weatherapp.model.WeatherInfo;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -45,8 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
+
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        mMap.setInfoWindowAdapter(new InfoWindowCustomAdapter(this));
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -54,8 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerOptions markerOptions = new MarkerOptions();
 
                 markerOptions.position(latLng);
-                markerOptions.title(latLng.latitude + " - " + latLng.longitude);
-                markerOptions.snippet(latLng.latitude + " : " + latLng.longitude);
 
                 mMap.clear();
 
@@ -77,10 +78,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        marker.setTitle(weatherInfo.getPlace());
                         marker.setSnippet(weatherInfo.toString());
                         marker.showInfoWindow();
-                        Toast.makeText(getApplicationContext(),
-                                weatherInfo.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
             }

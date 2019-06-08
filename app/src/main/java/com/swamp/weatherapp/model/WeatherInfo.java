@@ -1,10 +1,12 @@
-package com.swamp.weather.model;
+package com.swamp.weatherapp.model;
 
 public class WeatherInfo {
 
+    private String place;
     private double temperature;
     private double precipitation;
     private double humidity;
+    private double pressure;
     private String wind;
     private String cloudiness;
 
@@ -12,12 +14,23 @@ public class WeatherInfo {
         // Empty constructor
     }
 
-    public WeatherInfo(double temperature, double precipitation, double humidity, String wind, String cloudiness) {
+    public WeatherInfo(String place, double temperature, double precipitation, double humidity, double pressure,
+                       String wind, String cloudiness) {
+        this.place = place;
         this.temperature = temperature;
         this.precipitation = precipitation;
         this.humidity = humidity;
+        this.pressure = pressure;
         this.wind = wind;
         this.cloudiness = cloudiness;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public double getTemperature() {
@@ -38,6 +51,14 @@ public class WeatherInfo {
 
     public double getHumidity() {
         return humidity;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public double getPressure() {
+        return pressure;
     }
 
     public void setHumidity(double humidity) {
@@ -64,7 +85,7 @@ public class WeatherInfo {
     @Override
     public String toString() {
         return "Temperatura: " + String.valueOf(temperature) + "\n" +
-                "Precipitação: " + String.valueOf(precipitation)  + "\n" +
+//                "Precipitação: " + String.valueOf(precipitation)  + "\n" +
                 "Umidade: " + String.valueOf(humidity) + "\n" +
                 "Vento: " + wind + "\n" +
                 "Nebulosidade: " + cloudiness + "\n";
