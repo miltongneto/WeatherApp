@@ -13,11 +13,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.swamp.adapters.InfoWindowCustomAdapter;
 import com.swamp.weatherapp.helpers.WeatherHelper;
 import com.swamp.weatherapp.model.WeatherInfo;
+import com.google.gson.Gson;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private WeatherInfo weatherInfo;
+    private boolean window_show = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
 
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.setInfoWindowAdapter(new InfoWindowCustomAdapter(this));
@@ -57,11 +59,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerOptions markerOptions = new MarkerOptions();
 
                 markerOptions.position(latLng);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
                 mMap.clear();
 
                 Marker marker = mMap.addMarker(markerOptions);
+                marker.setDraggable(true);
                 getWeatherInfo(marker);
+            }
+        });
+
+        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                if(window_show == true){
+                    marker.hideInfoWindow();
+                    window_show = false;
+                }
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) {
+            }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                getWeatherInfo(marker);
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if(window_show == true){
+                    marker.hideInfoWindow();
+                    window_show = false;
+                } else {
+                    marker.showInfoWindow();
+                    window_show = true;
+                }
+
+                return true;
             }
         });
     }
@@ -78,9 +117,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Gson gson = new Gson();
+                        String weatherInfoString = gson.toJson(weatherInfo);
                         marker.setTitle(weatherInfo.getPlace());
-                        marker.setSnippet(weatherInfo.toString());
+//                        marker.setSnippet(weatherInfo.toString());
+                        marker.setSnippet(weatherInfoString);
                         marker.showInfoWindow();
+
+                        window_show = true;
                     }
                 });
             }

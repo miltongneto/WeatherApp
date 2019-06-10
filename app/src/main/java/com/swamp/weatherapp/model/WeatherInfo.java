@@ -4,8 +4,7 @@ public class WeatherInfo {
 
     private String place;
     private double temperature;
-    private double precipitation;
-    private double humidity;
+    private int humidity;
     private double pressure;
     private String wind;
     private String cloudiness;
@@ -14,11 +13,10 @@ public class WeatherInfo {
         // Empty constructor
     }
 
-    public WeatherInfo(String place, double temperature, double precipitation, double humidity, double pressure,
+    public WeatherInfo(String place, double temperature, int humidity, double pressure,
                        String wind, String cloudiness) {
         this.place = place;
         this.temperature = temperature;
-        this.precipitation = precipitation;
         this.humidity = humidity;
         this.pressure = pressure;
         this.wind = wind;
@@ -41,15 +39,7 @@ public class WeatherInfo {
         this.temperature = temperature;
     }
 
-    public double getPrecipitation() {
-        return precipitation;
-    }
-
-    public void setPrecipitation(double precipitation) {
-        this.precipitation = precipitation;
-    }
-
-    public double getHumidity() {
+    public int getHumidity() {
         return humidity;
     }
 
@@ -61,7 +51,7 @@ public class WeatherInfo {
         return pressure;
     }
 
-    public void setHumidity(double humidity) {
+    public void setHumidity(int humidity) {
         this.humidity = humidity;
     }
 
@@ -85,7 +75,6 @@ public class WeatherInfo {
     @Override
     public String toString() {
         return "Temperatura: " + String.valueOf(temperature) + "\n" +
-//                "Precipitação: " + String.valueOf(precipitation)  + "\n" +
                 "Umidade: " + String.valueOf(humidity) + "\n" +
                 "Vento: " + wind + "\n" +
                 "Nebulosidade: " + cloudiness + "\n";

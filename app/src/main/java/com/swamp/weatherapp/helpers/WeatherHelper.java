@@ -12,8 +12,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import static java.nio.file.Paths.get;
-
 public class WeatherHelper {
 
     private static final String API_KEY = "b94b3ef9ee3f852401b2830a3787fadd";
@@ -73,7 +71,7 @@ public class WeatherHelper {
                 JSONObject json = new JSONObject(data);
                 JSONObject main = json.getJSONObject("main");
                 double temp = main.getDouble("temp");
-                double humidity = main.getDouble("humidity");
+                int humidity = main.getInt("humidity");
                 double pressure = main.getDouble("pressure");
 
                 JSONObject weather_json = json.getJSONArray("weather").getJSONObject(0);
@@ -84,7 +82,12 @@ public class WeatherHelper {
 
 
                 JSONObject sys = json.getJSONObject("sys");
-                String country = sys.getString("country");
+
+                String country = "";
+                if(sys.has("country")) {
+                    country = sys.getString("country");
+                }
+
                 String city = json.getString("name");
 
                 weatherInfo.setPlace(city + " - " + country);
